@@ -1,0 +1,8 @@
+[package]
+name = "programmation_efficace"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.95"
+serde_json = "1.0.137"
