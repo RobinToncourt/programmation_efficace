@@ -1,5 +1,8 @@
 use std::collections::HashMap;
 
+// Temps en O(nk log k) en moyenne et en
+// O(n2k log k) dans le pire des cas.
+// Avec k=la taille du mot le plus grand et n=le nombre de mots.
 pub fn anagram<'a>(words: &[&'a str]) -> Vec<Vec<&'a str>> {
     let mut unique_words: Vec<&'a str> = Vec::new();
     for w in words {

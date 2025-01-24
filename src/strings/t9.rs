@@ -32,6 +32,9 @@ fn word_to_code(word: &str) -> Result<String, String> {
     Ok(result)
 }
 
+// O(nk) pour l'initialisation du dictionnaire et
+// O(k) pour chaque requête.
+// Avec n=le nombre du mot du dictionnaire et k la taille du mot le plus grand.
 pub fn predictive_test(dictionnary: HashMap<String, usize>) -> HashMap<String, String> {
     let mut freq: HashMap<String, usize> = HashMap::new();
     for (word, weight) in dictionnary {
