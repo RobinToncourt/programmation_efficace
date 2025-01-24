@@ -26,7 +26,8 @@ impl TrieNode {
         } else {
             let letter: char = word.chars().nth(index).unwrap();
 
-            let trie_node_link: &mut TrieNode = get_mut_or_default_btree_map(&mut self.links, &letter);
+            let trie_node_link: &mut TrieNode =
+                get_mut_or_default_btree_map(&mut self.links, &letter);
 
             trie_node_link.add_word_at(word, index + 1);
         }
