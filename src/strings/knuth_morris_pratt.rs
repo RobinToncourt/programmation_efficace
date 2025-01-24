@@ -3,6 +3,10 @@ fn knuth_morris_pratt(word: &str, pattern: &str) -> Option<usize> {
     todo!()
 }
 
+fn knuth_morris_pratt_personnal(word: &str, pattern: &str) -> Option<usize> {
+    todo!()
+}
+
 fn naive(word: &str, pattern: &str) -> Option<usize> {
     if word.len() < pattern.len() {
         return None;
@@ -10,7 +14,6 @@ fn naive(word: &str, pattern: &str) -> Option<usize> {
 
     let word_letters: Vec<char> = word.chars().collect();
     let pattern_letters: Vec<char> = pattern.chars().collect();
-    println!("{word_letters:?}");
 
     for i in 0..=word_letters.len() - pattern.len() {
         if word_letters[i..i + pattern.len()] == pattern_letters {
@@ -29,33 +32,32 @@ fn built_in_find(word: &str, pattern: &str) -> Option<usize> {
 mod knuth_morris_pratt_test {
     use super::*;
 
+    fn compare_tester(function: &dyn Fn(&str, &str) -> Option<usize>) {
+        assert_eq!(None, function("bon", "bonjour"));
+        assert_eq!(Some(0), function("bonjour", "bon"));
+        assert_eq!(Some(3), function("bonjour", "jour"));
+        assert_eq!(None, function("bonjour", "bonsoir"));
+        assert_eq!(None, function("", "bonjour"));
+        assert_eq!(Some(0), function("bonjour", ""));
+    }
+
     #[test]
     fn test_knuth_morris_pratt() {
-        assert_eq!(None, knuth_morris_pratt("bon", "bonjour"));
-        assert_eq!(Some(0), knuth_morris_pratt("bonjour", "bon"));
-        assert_eq!(Some(3), knuth_morris_pratt("bonjour", "jour"));
-        assert_eq!(None, knuth_morris_pratt("bonjour", "bonsoir"));
-        assert_eq!(None, knuth_morris_pratt("", "bonjour"));
-        assert_eq!(None, knuth_morris_pratt("bonjour", ""));
+        compare_tester(&knuth_morris_pratt);
+    }
+
+    #[test]
+    fn test_knuth_morris_pratt_personnal() {
+        compare_tester(&knuth_morris_pratt_personnal);
     }
 
     #[test]
     fn test_naive() {
-        assert_eq!(None, naive("bon", "bonjour"));
-        assert_eq!(Some(0), naive("bonjour", "bon"));
-        assert_eq!(Some(3), naive("bonjour", "jour"));
-        assert_eq!(None, naive("bonjour", "bonsoir"));
-        assert_eq!(None, naive("", "bonjour"));
-        assert_eq!(Some(0), naive("bonjour", ""));
+        compare_tester(&naive);
     }
 
     #[test]
     fn test_built_in_find() {
-        assert_eq!(None, built_in_find("bon", "bonjour"));
-        assert_eq!(Some(0), built_in_find("bonjour", "bon"));
-        assert_eq!(Some(3), built_in_find("bonjour", "jour"));
-        assert_eq!(None, built_in_find("bonjour", "bonsoir"));
-        assert_eq!(None, built_in_find("", "bonjour"));
-        assert_eq!(Some(0), built_in_find("bonjour", ""));
+        compare_tester(&built_in_find);
     }
 }
