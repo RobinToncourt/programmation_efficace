@@ -1,23 +1,18 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
-use crate::utils::get_mut_or_default;
-
-const ASCII_LETTERS: [char; 26] = [
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-    't', 'u', 'v', 'w', 'x', 'y', 'z',
-];
+use crate::utils::get_mut_or_default_btree_map;
 
 #[derive(Default, Debug)]
 pub struct TrieNode {
     is_word: bool,
-    links: HashMap<char, TrieNode>,
+    links: BTreeMap<char, TrieNode>,
 }
 
 impl TrieNode {
     fn new() -> Self {
         Self {
             is_word: false,
-            links: HashMap::new(),
+            links: BTreeMap::new(),
         }
     }
 
@@ -31,7 +26,7 @@ impl TrieNode {
         } else {
             let letter: char = word.chars().nth(index).unwrap();
 
-            let trie_node_link: &mut TrieNode = get_mut_or_default(&mut self.links, &letter);
+            let trie_node_link: &mut TrieNode = get_mut_or_default_btree_map(&mut self.links, &letter);
 
             trie_node_link.add_word_at(word, index + 1);
         }
@@ -50,6 +45,11 @@ pub fn create_trie_from_word_list(word_list: &[&str]) -> TrieNode {
 
 fn spell_check(trie: &TrieNode, word: &str) -> String {
     let mut distance: isize = 0;
+
+    if word.is_empty() {
+        return String::new();
+    }
+
     loop {
         match search(Some(trie), distance, word, 0) {
             Some(result) => return result,
@@ -82,15 +82,15 @@ fn search(trie: Option<&TrieNode>, distance: isize, word: &str, i: usize) -> Opt
         return None;
     }
 
-    for c in ASCII_LETTERS {
-        let f: Option<String> = search(trie.links.get(&c), distance - 1, word, i);
+    for (c, sub_trie_node) in &trie.links {
+        let f: Option<String> = search(Some(sub_trie_node), distance - 1, word, i);
         if f.is_some() {
             let mut result = c.to_string();
             result.push_str(&f.unwrap());
             return Some(result);
         }
 
-        let f: Option<String> = search(trie.links.get(&c), distance - 1, word, i + 1);
+        let f: Option<String> = search(Some(sub_trie_node), distance - 1, word, i + 1);
         if f.is_some() {
             let mut result = c.to_string();
             result.push_str(&f.unwrap());
@@ -110,7 +110,9 @@ mod correcteur_test {
         let word_list = vec!["as", "port", "pore", "pre", "pres", "pret"];
         let trie: TrieNode = create_trie_from_word_list(&word_list);
 
+        assert_eq!("".to_string(), spell_check(&trie, ""));
         assert_eq!("pres".to_string(), spell_check(&trie, "pres"));
         assert_eq!("pres".to_string(), spell_check(&trie, "prez"));
+        assert_eq!("pore".to_string(), spell_check(&trie, "bjeurg"));
     }
 }
