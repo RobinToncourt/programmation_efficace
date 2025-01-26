@@ -1,3 +1,3 @@
 #![allow(dead_code)]
-mod strings;
-mod utils;
+pub mod strings;
+pub mod utils;

@@ -58,7 +58,7 @@ pub fn predictive_test(dictionnary: HashMap<String, usize>) -> HashMap<String, S
     prop
 }
 
-fn propose<'a>(prop: &'a HashMap<String, String>, seq: &str) -> Option<&'a str> {
+pub fn propose<'a>(prop: &'a HashMap<String, String>, seq: &str) -> Option<&'a str> {
     prop.get(seq).map(std::string::String::as_str)
 }
 
