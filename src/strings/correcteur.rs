@@ -44,7 +44,7 @@ pub fn create_trie_from_word_list(word_list: &[&str]) -> TrieNode {
     trie_node
 }
 
-fn spell_check(trie: &TrieNode, word: &str) -> String {
+pub fn spell_check(trie: &TrieNode, word: &str) -> String {
     let mut distance: isize = 0;
 
     if word.is_empty() {

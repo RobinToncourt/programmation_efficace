@@ -12,21 +12,14 @@ pub fn knuth_morris_pratt(word: &str, pattern: &str) -> Option<usize> {
     let mut j: isize = -1;
 
     for i in 1..pattern.len() {
-        println!("{r:?}");
-
         while j >= 0 && pattern_letters[i - 1] != pattern_letters[j as usize] {
             j = r[j as usize];
         }
         j += 1;
         r[i] = j;
     }
-
-    println!("{r:?}");
-
     j = 0;
     for (i, c) in word_letters.iter().enumerate() {
-        println!("j: {j}");
-
         while j >= 0 && *c != pattern_letters[j as usize] {
             j = r[j as usize];
         }
@@ -108,7 +101,7 @@ fn one_loop(word: &str, pattern: &str) -> Option<usize> {
     None
 }
 
-fn one_loop_generic<T>(list: &[T], pattern: &[T]) -> Option<usize>
+fn one_loop_slice_generic<T>(list: &[T], pattern: &[T]) -> Option<usize>
 where
     T: Eq,
 {
@@ -201,15 +194,15 @@ mod knuth_morris_pratt_test {
     }
 
     #[test]
-    fn test_one_loop_generic() {
-        assert_eq!(Some(6), one_loop_generic(&ts("lalopalalali"), &ts("lala")));
-        assert_eq!(None, one_loop_generic(&ts("bon"), &ts("bonjour")));
-        assert_eq!(Some(0), one_loop_generic(&ts("bonjour"), &ts("bon")));
-        assert_eq!(Some(3), one_loop_generic(&ts("bonjour"), &ts("jour")));
-        assert_eq!(None, one_loop_generic(&ts("bonjour"), &ts("bonsoir")));
-        assert_eq!(None, one_loop_generic(&ts(""), &ts("bonjour")));
-        assert_eq!(Some(0), one_loop_generic(&ts("bonjour"), &ts("")));
-        assert_eq!(Some(0), one_loop_generic(&ts(""), &ts("")));
-        assert_eq!(Some(6), one_loop_generic(&ts("lalalalalali"), &ts("lalali")));
+    fn test_one_loop_slice_generic() {
+        assert_eq!(Some(6), one_loop_slice_generic(&ts("lalopalalali"), &ts("lala")));
+        assert_eq!(None, one_loop_slice_generic(&ts("bon"), &ts("bonjour")));
+        assert_eq!(Some(0), one_loop_slice_generic(&ts("bonjour"), &ts("bon")));
+        assert_eq!(Some(3), one_loop_slice_generic(&ts("bonjour"), &ts("jour")));
+        assert_eq!(None, one_loop_slice_generic(&ts("bonjour"), &ts("bonsoir")));
+        assert_eq!(None, one_loop_slice_generic(&ts(""), &ts("bonjour")));
+        assert_eq!(Some(0), one_loop_slice_generic(&ts("bonjour"), &ts("")));
+        assert_eq!(Some(0), one_loop_slice_generic(&ts(""), &ts("")));
+        assert_eq!(Some(6), one_loop_slice_generic(&ts("lalalalalali"), &ts("lalali")));
     }
 }
