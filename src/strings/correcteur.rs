@@ -34,6 +34,7 @@ impl TrieNode {
     }
 }
 
+#[must_use]
 pub fn create_trie_from_word_list(word_list: &[&str]) -> TrieNode {
     let mut trie_node = TrieNode::new();
 
@@ -44,6 +45,7 @@ pub fn create_trie_from_word_list(word_list: &[&str]) -> TrieNode {
     trie_node
 }
 
+#[must_use]
 pub fn spell_check(trie: &TrieNode, word: &str) -> String {
     let mut distance: isize = 0;
 

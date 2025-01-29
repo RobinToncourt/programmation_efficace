@@ -35,10 +35,15 @@ fn word_to_code(word: &str) -> Result<String, String> {
 // O(nk) pour l'initialisation du dictionnaire et
 // O(k) pour chaque requête.
 // Avec n=le nombre du mot du dictionnaire et k la taille du mot le plus grand.
-pub fn predictive_test(dictionnary: HashMap<String, usize>) -> HashMap<String, String> {
+pub fn predictive_test<S>(
+    dictionnary: HashMap<String, usize, S>
+) -> HashMap<String, String>
+where
+    S: std::hash::BuildHasher,
+{
     let mut freq: HashMap<String, usize> = HashMap::new();
     for (word, weight) in dictionnary {
-        let mut prefixe = String::new();
+        let mut prefixe = String::default();
         for c in word.chars() {
             prefixe.push(c);
             let prefixe_weight: usize = freq.get(&prefixe).unwrap_or(&0) + weight;
@@ -58,7 +63,12 @@ pub fn predictive_test(dictionnary: HashMap<String, usize>) -> HashMap<String, S
     prop
 }
 
-pub fn propose<'a>(prop: &'a HashMap<String, String>, seq: &str) -> Option<&'a str> {
+pub fn propose<'a, S>(
+    prop: &'a HashMap<String, String, S>, seq: &str
+) -> Option<&'a str>
+where
+    S: std::hash::BuildHasher,
+{
     prop.get(seq).map(std::string::String::as_str)
 }
 

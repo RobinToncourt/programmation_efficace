@@ -1,4 +1,5 @@
 // Complexité de O(m + n), somme des longeurs du mot et du pattern.
+#[must_use]
 pub fn knuth_morris_pratt(word: &str, pattern: &str) -> Option<usize> {
     if pattern.is_empty() {
         return Some(0);
@@ -83,7 +84,7 @@ fn one_loop(word: &str, pattern: &str) -> Option<usize> {
 
     for (i, c) in word_letters.iter().enumerate() {
         let mut new_pml: Vec<PatternMatching<char>> = Vec::new();
-        for mut pm in pml.into_iter() {
+        for mut pm in pml {
             match pm.check(c) {
                 PatternState::Continue => {new_pml.push(pm)},
                 PatternState::Match => return Some(pm.list_index),
@@ -113,7 +114,7 @@ where
 
     for (i, item) in list.iter().enumerate() {
         let mut new_pml: Vec<PatternMatching<T>> = Vec::new();
-        for mut pm in pml.into_iter() {
+        for mut pm in pml {
             match pm.check(item) {
                 PatternState::Continue => {new_pml.push(pm)},
                 PatternState::Match => return Some(pm.list_index),
@@ -204,5 +205,39 @@ mod knuth_morris_pratt_test {
         assert_eq!(Some(0), one_loop_slice_generic(&ts("bonjour"), &ts("")));
         assert_eq!(Some(0), one_loop_slice_generic(&ts(""), &ts("")));
         assert_eq!(Some(6), one_loop_slice_generic(&ts("lalalalalali"), &ts("lalali")));
+    }
+}
+
+#[cfg(test)]
+mod knuth_morris_pratt_bench {
+    use super::*;
+    use test::Bencher;
+
+    #[bench]
+    fn bench_knuth_morris_pratt(b: &mut Bencher) {
+        b.iter(|| {
+            let _ = knuth_morris_pratt("bonjour", "jour");
+        });
+    }
+
+    #[bench]
+    fn bench_one_loop(b: &mut Bencher) {
+        b.iter(|| {
+            one_loop("bonjour", "jour");
+        });
+    }
+
+    #[bench]
+    fn bench_naive(b: &mut Bencher) {
+        b.iter(|| {
+            naive("bonjour", "jour");
+        });
+    }
+
+    #[bench]
+    fn bench_built_in_find(b: &mut Bencher) {
+        b.iter(|| {
+            built_in_find("bonjour", "jour");
+        });
     }
 }
