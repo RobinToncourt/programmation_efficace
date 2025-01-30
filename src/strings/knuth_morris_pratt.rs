@@ -216,28 +216,28 @@ mod knuth_morris_pratt_bench {
     #[bench]
     fn bench_knuth_morris_pratt(b: &mut Bencher) {
         b.iter(|| {
-            let _ = knuth_morris_pratt("bonjour", "jour");
+            test::black_box(knuth_morris_pratt("bonjour", "jour"));
         });
     }
 
     #[bench]
     fn bench_one_loop(b: &mut Bencher) {
         b.iter(|| {
-            one_loop("bonjour", "jour");
+            test::black_box(one_loop("bonjour", "jour"));
         });
     }
 
     #[bench]
     fn bench_naive(b: &mut Bencher) {
         b.iter(|| {
-            naive("bonjour", "jour");
+            test::black_box(naive("bonjour", "jour"));
         });
     }
 
     #[bench]
     fn bench_built_in_find(b: &mut Bencher) {
         b.iter(|| {
-            built_in_find("bonjour", "jour");
+            test::black_box(built_in_find("bonjour", "jour"));
         });
     }
 }

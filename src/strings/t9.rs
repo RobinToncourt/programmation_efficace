@@ -25,7 +25,7 @@ fn word_to_code(word: &str) -> Result<String, String> {
 
     for c in word.chars() {
         let char_digit: &u8 =
-            char_to_phone_digit(c).ok_or("Character not on phone panel: '{c}'")?;
+            char_to_phone_digit(c).ok_or(format!("Character not on phone panel: '{c}'"))?;
         result.push_str(&char_digit.to_string());
     }
 
